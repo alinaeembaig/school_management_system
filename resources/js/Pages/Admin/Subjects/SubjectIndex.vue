@@ -6,6 +6,8 @@ import Table from '@/Components/Table.vue';
 import TableRow from '@/Components/TableRow.vue';
 import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
+import { usePermission} from "@/composables/permissions"
+const { hasRole } = usePermission();
 defineProps(['subjects']);
 </script>
 
@@ -41,12 +43,17 @@ defineProps(['subjects']);
                             <TableDataCell>{{ subject.name }}</TableDataCell>
                             <TableDataCell>{{ subject.get_courses.name }}</TableDataCell>
                             <TableDataCell>{{ subject.description }}</TableDataCell>
-                            <TableDataCell>
+                            <TableDataCell v-if="hasRole('Admin')">
                                 <Link :href="route('subjects.edit', subject.id)" class="text-green-400 hover:text-green-600">
                                     Edit
                                 </Link>  / 
                                 <Link :href="route('subjects.destroy', subject.id)" method="DELETE" as="button" class="text-red-400 hover:text-red-600">
                                     Delete
+                                </Link>
+                            </TableDataCell>
+                            <TableDataCell v-else="">
+                                <Link :href="route('subjects.edit', subject.id)" method="GET" class="text-green-400 hover:text-green-600">
+                                    Select
                                 </Link>
                             </TableDataCell>
                         </TableRow>

@@ -7,9 +7,13 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Http\Resources\SubjectResource;
 use App\Models\Course;
+use App\Models\TeacherSubject;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+use PHPUnit\Framework\MockObject\Stub\ReturnReference;
 
 class SubjectsController extends Controller
 {
@@ -21,9 +25,21 @@ class SubjectsController extends Controller
         //
         // $abc = SubjectResource::collection(Subject::with('getCourses')->get());
         // dd($abc[0]['getCourses']->name);
-        return Inertia::render('Admin/Subjects/SubjectIndex', [
-            'subjects' => SubjectResource::collection(Subject::with('getCourses')->get())
-        ]);
+
+        $user = User::with('roles')->where('id', Auth::user()->id)->first();
+        $teacherSubjects = TeacherSubject::get();
+        if($user->roles[0]->name == 'Teacher'){
+            return Inertia::render('Admin/Subjects/SubjectIndex', [
+                'subjects' => SubjectResource::collection(Subject::with('getCourses')->get()),
+                'teacherSubjects' => $teacherSubjects
+
+            ]);
+        }elseif($user->roles[0]->name == 'Admin'){
+            return Inertia::render('Admin/Subjects/SubjectIndex', [
+                'subjects' => SubjectResource::collection(Subject::with('getCourses')->get())
+            ]);
+        }
+        
     }
 
     /**
@@ -63,12 +79,25 @@ class SubjectsController extends Controller
     {
         //
         // dd($id);
-        $courses = Course::get();
-        $subject = Subject::find($subject->id);
-        return Inertia::render('Admin/Subjects/Edit', [
-            'subject' => new SubjectResource($subject),
-            'courses' => $courses,
-        ]);
+        $user = User::with('roles')->where('id', Auth::user()->id)->first();
+        
+        if($user->roles[0]->name == 'Teacher'){
+            TeacherSubject::create([
+                'teacher_id' => Auth::user()->id,
+                'subject_id' => $subject->id,
+            ]);
+            return Inertia::render('Admin/Subjects/SubjectIndex', [
+                'subjects' => SubjectResource::collection(Subject::with('getCourses')->get())
+            ]);
+        }elseif($user->roles[0]->name == 'Admin'){
+            $courses = Course::get();
+            $subject = Subject::find($subject->id);
+            return Inertia::render('Admin/Subjects/Edit', [
+                'subject' => new SubjectResource($subject),
+                'courses' => $courses,
+            ]);
+        }
+        
     }
 
     /**
