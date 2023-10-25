@@ -8,7 +8,8 @@ import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
 import { usePermission} from "@/composables/permissions"
 const { hasRole } = usePermission();
-defineProps(['subjects']);
+var subjectsa = defineProps(['subjects']);
+console.log(subjectsa)
 </script>
 
 <template>
@@ -52,7 +53,10 @@ defineProps(['subjects']);
                                 </Link>
                             </TableDataCell>
                             <TableDataCell v-else="">
-                                <Link :href="route('subjects.edit', subject.id)" method="GET" class="text-green-400 hover:text-green-600">
+                                <Link v-if="subject.get_teacher_subject != null" method="GET" class="text-green-400 hover:text-green-600">
+                                    Selected
+                                </Link>
+                                <Link v-else="" :href="route('subjects.edit', subject.id)" method="GET" class="text-red-400 hover:text-red-600">
                                     Select
                                 </Link>
                             </TableDataCell>

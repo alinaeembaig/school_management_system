@@ -6,10 +6,13 @@ use App\Http\Requests\CreateCourseRequest;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Http\Resources\CourseResource;
+use App\Models\StudentCourseSemester;
+use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Validation\Rule;
 
 class CoursesController extends Controller
@@ -93,5 +96,24 @@ class CoursesController extends Controller
         //
         $course->delete();
         return to_route('courses.index');
+    }
+
+    public function assignTOStudent(User $user, Request $request): Response
+    {
+        // dd($user, $request->id);
+        return  Inertia::render('Admin/Users/AssignCourse', [
+            'userId' => $request->id,
+            'courses' => CourseResource::collection(Course::get()),
+            'semesters' => Config::get('constants.semesters'),
+        ]);
+    }
+
+    public function assignStudent(User $user, Request $request){
+        StudentCourseSemester::create([
+            'course_id' => $request->course_id,
+            'user_id' => $request->user_id,
+            'semester_id' => $request->semester_id,
+        ]);
+        return to_route('users.index');
     }
 }

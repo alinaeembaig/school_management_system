@@ -44,6 +44,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/courses', CoursesController::class);
     Route::resource('/subjects', SubjectsController::class);
     Route::resource('/permissions', PermissionController::class);
+    Route::get('/assignTOStudent/{id}', [CoursesController::class, 'assignTOStudent'])->name('courses.assignTOStudent');    
+    Route::post('/assignStudent', [CoursesController::class, 'assignStudent'])->name('courses.assignStudent');    
+    Route::get('/myCourse', [StudentsController::class, 'myCourse'])->name('students.myCourse');    
+    
 });
 
 Route::get('/dashboard', function () {

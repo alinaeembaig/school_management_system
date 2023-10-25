@@ -27,11 +27,12 @@ class SubjectsController extends Controller
         // dd($abc[0]['getCourses']->name);
 
         $user = User::with('roles')->where('id', Auth::user()->id)->first();
-        $teacherSubjects = TeacherSubject::get();
+        // $teacherSubjects = TeacherSubject::where('teacher_id', Auth::user()->id)->get();
+        // dd(SubjectResource::collection(Subject::with('getTeacherSubject')->with('getCourses')->get()));
         if($user->roles[0]->name == 'Teacher'){
             return Inertia::render('Admin/Subjects/SubjectIndex', [
-                'subjects' => SubjectResource::collection(Subject::with('getCourses')->get()),
-                'teacherSubjects' => $teacherSubjects
+                'subjects' => SubjectResource::collection(Subject::with('getTeacherSubject')->with('getCourses')->get()),
+                // 'teacherSubjects' => $teacherSubjects
 
             ]);
         }elseif($user->roles[0]->name == 'Admin'){

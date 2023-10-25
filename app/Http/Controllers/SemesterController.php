@@ -93,4 +93,8 @@ class SemesterController extends Controller
     {
         //
     }
+
+    public function getData(){
+        
+    }
 }

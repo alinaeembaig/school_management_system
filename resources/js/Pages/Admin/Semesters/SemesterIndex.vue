@@ -1,12 +1,20 @@
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 import Table from '@/Components/Table.vue';
 import TableRow from '@/Components/TableRow.vue';
 import TableHeaderCell from '@/Components/TableHeaderCell.vue';
 import TableDataCell from '@/Components/TableDataCell.vue';
 defineProps(['semesterCourses', 'semesters', 'courses']);
+const form = useForm( {
+    course_id: "",
+})
+form.post(route('semesters.index'), {
+    onSuccess: (response) => {
+        console.log(response.props.response_data);
+    }
+})
 </script>
 
 <template>
@@ -20,10 +28,19 @@ defineProps(['semesterCourses', 'semesters', 'courses']);
         <div class="max-w-7xl mx-auto py-4">
            <div class="flex justify-between">
                 <h1>Semester Index </h1>
+                
+                            
+                
                 <Link :href="route('semesters.create')" class="px-3 py-2 text-white font-semibold bg-indigo-500 hover:bg-indigo700 rounded">
                     Set Semester Course
                 </Link>
            </div>
+           <select id="course_id" method="post" v-model="form.course_id" class="w-60 px-4 py-3 font-semibold rounded flex">
+                    <option disabled selected>-- Select Course To Search -- </option>
+                    <option v-for="course in courses" :key="course.id" :value="course.id">
+                                {{ course.name }}
+                    </option>
+           </select> 
            <div class="mt-6">
                 <Table>
                     <template #header>

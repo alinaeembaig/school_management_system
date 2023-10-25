@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CourseResource;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Inertia\Response;
 use Inertia\Inertia;
 use App\Http\Resources\UserResource;
+use App\Models\Course;
+use App\Models\StudentCourseSemester;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 
 class StudentsController extends Controller
 {
@@ -68,5 +73,17 @@ class StudentsController extends Controller
     public function destroy(Student $student)
     {
         //
+    }
+    public function myCourse(){
+        $studentCourseSemester = StudentCourseSemester::where('user_id', Auth::user()->id)->first();
+        $semesters = Config::get('constants.semesters');
+        $selectedSemester = null;
+   
+        // dd($selectedSemester);
+        return Inertia::render('Admin/Students/MyCourse', [
+            'user' => User::where('id', Auth::user()->id)->first(),
+            'course' => Course::where('id', $studentCourseSemester->course_id)->first(),
+            'semester' => $semesters[(int)$studentCourseSemester->semester_id - 1],
+        ]);
     }
 }

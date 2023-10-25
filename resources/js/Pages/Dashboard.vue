@@ -292,5 +292,6 @@ import TableDataCell from '@/Components/TableDataCell.vue';
             </div>
         </div>
     </div>
+    
     </AdminLayout>
 </template>

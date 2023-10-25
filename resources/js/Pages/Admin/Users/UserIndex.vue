@@ -33,6 +33,7 @@ defineProps(['users']);
                             <TableHeaderCell>Email</TableHeaderCell>
                             <TableHeaderCell>Role</TableHeaderCell>
                             <TableHeaderCell>Action</TableHeaderCell>
+                            <TableHeaderCell>Assigne Course To Student</TableHeaderCell>
                         </TableRow>
                     </template>
                     <template #default>
@@ -47,6 +48,11 @@ defineProps(['users']);
                                 </Link>  / 
                                 <Link :href="route('users.destroy', user.id)" method="DELETE" as="button" class="text-red-400 hover:text-red-600">
                                     Delete
+                                </Link>
+                            </TableDataCell>
+                            <TableDataCell v-if="user.roles[0] == 'Student'">
+                                <Link :href="route('courses.assignTOStudent', user.id)" class="text-green-400 hover:text-green-600">
+                                    Select Course
                                 </Link>
                             </TableDataCell>
                         </TableRow>
