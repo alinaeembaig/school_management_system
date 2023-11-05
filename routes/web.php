@@ -13,6 +13,8 @@ use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +53,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $usersCountMale = User::where('gender', 1)->get();
+    $usersCountFemale = User::where('gender', 2)->get();
+    $usersCountOthers = User::where('gender', 3)->get();
+    return Inertia::render('Dashboard', [
+        'usersCountMale' => $usersCountMale->count(),
+        'usersCountFemale' => $usersCountFemale->count(),
+        'usersCountOthers' => $usersCountOthers->count(),
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

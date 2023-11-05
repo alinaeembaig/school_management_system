@@ -20,6 +20,11 @@
     },
     "dependencies": {
         "@inertiajs/inertia": "^0.11.1",
-        "@inertiajs/inertia-vue3": "^0.6.0"
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "chart.js": "^4.4.0",
+        "highcharts": "^11.1.0",
+        "highcharts-vue": "^1.4.3",
+        "vue-chartjs": "^5.2.0",
+        "vue3-highcharts": "^0.1.3"
     }
 }

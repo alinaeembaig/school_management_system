@@ -44,5 +44,20 @@ return [
             'key' => '8',
             'value' => 'Semester 8',
         ],
+    ],
+    'genders' => [
+        [
+            'key' => '1',
+            'value' => 'Male',
+        ],
+        [
+            'key' => '2',
+            'value' => 'Female',
+        ],
+        [
+            'key' => '3',
+            'value' => 'Others',
+        ],
     ]
+
 ];

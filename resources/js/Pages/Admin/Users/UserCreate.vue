@@ -6,13 +6,14 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 // import DropDown from '@/Components/DropDown.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-defineProps(['roles']);
+defineProps(['roles', 'genders']);
 const form = useForm({
     name: '',
     email: '',
     password: '',
     password_confirmation: '',
     roles: '',
+    gender_id: ''
 });
 
 const submit = () => {
@@ -104,6 +105,19 @@ const submit = () => {
 
                     <InputError class="mt-2" :message="form.errors.password_confirmation" />
                 </div>
+
+                 <div class="mt-4">
+                     <InputLabel for="Gender" value="Genders" />
+
+                        <select  id="gender_id" v-model="form.gender_id" class="bg-white-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option v-for="gender in genders" :key="gender.key" :value="gender.key">
+                                {{ gender.value }}
+                            </option>
+                        </select>
+
+                        <InputError class="mt-2" :message="form.errors.role" />
+                </div>
+
 
                 <div class="flex items-center justify-end mt-4">
                     <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">

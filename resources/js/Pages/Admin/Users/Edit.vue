@@ -10,7 +10,7 @@ const props = defineProps({
     user:{
         type: Object,
         required: true,
-    }
+    },
 });
 
 const form = useForm({

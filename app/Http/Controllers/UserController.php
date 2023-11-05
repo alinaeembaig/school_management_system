@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
@@ -35,7 +36,8 @@ class UserController extends Controller
         //
         $roles = Role::get();
         return Inertia::render('Admin/Users/UserCreate', [
-            'roles' => $roles
+            'roles' => $roles,
+            'genders' => Config::get('constants.genders')
         ]);
     }
 
@@ -51,12 +53,13 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'roles' => 'required|string|max:255',
+            'gender_id' => 'required'
         ]);
-                
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'gender' => (int)$request->gender_id,
         ])->assignRole($request->roles);
 
         return to_route('users.index');
